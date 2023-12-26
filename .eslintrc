@@ -1,0 +1,48 @@
+{
+  "extends": ["react-app", "react-app/jest"],
+  "plugins": ["prettier"],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "rules": {
+    "prettier/prettier": [
+      2,
+      {
+        "semi": true,
+        "trailingComma": "none"
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": ["external", "builtin", "index", "sibling", "parent", "internal", "type"],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always-and-inside-groups"
+      }
+    ],
+    "react/no-array-index-key": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      "rules": {
+        "import/order": [
+          "error",
+          {
+            "groups": ["external", "builtin", "index", "sibling", "parent", "internal", "type"],
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            },
+            "newlines-between": "always-and-inside-groups"
+          }
+        ]
+      }
+    }
+  ]
+}
