@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { Layout } from './components/layout/Layout';
 import { AuthPage } from './pages/AuthPage';
-import { ElixirDetailsPage } from './pages/ElixirDetailsPage';
+import { ElixirPage } from './pages/ElixirPage';
 import { MainPage } from './pages/MainPage';
 
 const router = createBrowserRouter([
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/elixir/:id',
-        element: <ElixirDetailsPage />
+        element: <ElixirPage />
       },
       {
         path: '/auth',

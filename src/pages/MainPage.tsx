@@ -2,9 +2,9 @@ import { FC, useEffect, useState } from 'react';
 
 import ReactPaginate from 'react-paginate';
 
-import { ElixirCard } from '../components/ElixirCard';
-import { ElixirsFilter } from '../components/forms/ElixirsFilter';
-import { ElixirsSearch } from '../components/forms/ElixirsSearch';
+import { ElixirCard } from '../components/elixir/ElixirCard';
+import { ElixirFilter } from '../components/elixir/ElixirFilter';
+import { ElixirSearch } from '../components/elixir/ElixirSearch';
 import { IntroText } from '../components/IntroText';
 import ErrorIndicator from '../components/toasts/ErrorIndicator';
 import LoadingIndicator from '../components/toasts/LoadingIndicator';
@@ -29,29 +29,40 @@ const ElixirsList: FC<ElixirsListProps> = ({ elixirs }) => (
 );
 
 export const MainPage: FC<PaginatedListProps> = ({ itemsPerPage }) => {
-  const dispatch = useAppDispatch();
   const { error, loading, elixirs } = useAppSelector((state) => state.elixir);
+  const dispatch = useAppDispatch();
   const [itemOffset, setItemOffset] = useState(0);
+  const [filteredElixirs, setFilteredElixirs] = useState<IElixir[]>([]);
 
   useEffect(() => {
     dispatch(fetchElixirs());
   }, [dispatch]);
 
-  const endOffset = itemOffset + itemsPerPage;
-  const currentItems = elixirs.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(elixirs.length / itemsPerPage);
+  useEffect(() => {
+    setFilteredElixirs(elixirs);
+  }, [elixirs]);
 
-  const pageChangeHandler = (event: { selected: number }) => {
-    const newOffset = (event.selected * itemsPerPage) % elixirs.length;
-    setItemOffset(newOffset);
+  const endOffset = itemOffset + itemsPerPage;
+  const currentItems = filteredElixirs.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(filteredElixirs.length / itemsPerPage);
+
+  const filtersChangeHandler = (difficulty: string) => {
+    if (difficulty === '') {
+      setFilteredElixirs(elixirs);
+    } else {
+      const filteredItems = elixirs.filter((elixir) => elixir.difficulty === difficulty);
+      setFilteredElixirs(filteredItems);
+    }
+
+    setItemOffset(0);
   };
 
   return (
     <>
-      <div className='flex flex-col gap-5 mb-5 px-5'>
+      <div className='flex flex-col gap-5 mb-5 px-5 min-h-screen'>
         <IntroText />
-        <ElixirsSearch />
-        <ElixirsFilter />
+        <ElixirSearch />
+        <ElixirFilter onFilterChange={filtersChangeHandler} />
 
         {loading && <LoadingIndicator />}
         {error && <ErrorIndicator message={error} />}
@@ -62,7 +73,10 @@ export const MainPage: FC<PaginatedListProps> = ({ itemsPerPage }) => {
         className='flex justify-center items-center p-5 bg-black bg-opacity-50'
         breakLabel='...'
         nextLabel='>'
-        onPageChange={pageChangeHandler}
+        onPageChange={(event) => {
+          const newOffset = (event.selected * itemsPerPage) % filteredElixirs.length;
+          setItemOffset(newOffset);
+        }}
         pageRangeDisplayed={3}
         pageCount={pageCount}
         previousLabel='<'
