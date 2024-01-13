@@ -20,12 +20,11 @@ export const elixirSlice = createSlice({
   reducers: {
     fetching(state) {
       state.loading = true;
-      state.error = '';
     },
     fetchSuccess(state, action: PayloadAction<IElixir[]>) {
+      state.error = '';
       state.loading = false;
       state.elixirs = action.payload;
-      //state.error = '';
     },
     fetchError(state, action: PayloadAction<Error>) {
       state.loading = false;

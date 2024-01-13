@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { IElixir } from '../models/models';
+import { IElixir } from '../../models/models';
 
 interface ElixirCardProps {
   elixir: IElixir;
@@ -21,8 +21,8 @@ export function ElixirCard({ elixir }: ElixirCardProps) {
       <p>{elixir?.sideEffects}</p>
       <p>{elixir?.characteristics}</p>
       <p>{elixir?.time}</p>
-      <p>{elixir?.difficulty}</p>
       <p>{elixir?.manufacturer}</p>
+      <p className='text-pink-500'>{elixir?.difficulty}</p>
     </div>
   );
 }
